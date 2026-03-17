@@ -4,8 +4,6 @@ import { useMemo, useState } from 'react';
 
 const junkFoods = new Set([
   'candy',
-  'chocolate',
-  'chocolate bar',
   'chips',
   'fries',
   'french fries',
@@ -16,20 +14,11 @@ const junkFoods = new Set([
   'soda',
   'soft drink',
   'burger',
-  'hamburger',
-  'cheeseburger',
   'pizza',
-  'pepperoni pizza',
   'ice cream',
-  'cupcake',
-  'cake',
-  'nachos',
-  'onion rings',
   'fried chicken',
   'hot dog',
-  'milkshake',
-  'instant noodles',
-  'energy drink'
+  'milkshake'
 ]);
 
 const healthyFoods = new Set([
