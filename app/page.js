@@ -118,8 +118,8 @@ export default function Home() {
   };
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-2xl flex-col items-center justify-center gap-6 px-4 py-12">
-      <section className="w-full rounded-2xl bg-white p-6 shadow-lg md:p-8">
+    <main className="min-h-screen bg-slate-200 bg-[image:url('/background-pattern.svg')] bg-cover bg-center bg-no-repeat px-4 py-12">
+      <section className="mx-auto w-full max-w-2xl rounded-2xl bg-white/90 p-6 shadow-lg backdrop-blur-[2px] md:p-8">
         <h1 className="text-3xl font-bold tracking-tight">Junk or No</h1>
         <p className="mt-2 text-sm text-slate-600">Add the food, a short description, and how it is made to check if it is likely junk food.</p>
 
