@@ -25,18 +25,27 @@ const healthyFoods = new Set([
   'apple',
   'banana',
   'orange',
+  'strawberry',
+  'blueberry',
   'broccoli',
   'spinach',
   'carrot',
+  'cucumber',
+  'tomato',
   'oatmeal',
   'salad',
+  'quinoa',
   'brown rice',
   'grilled chicken',
+  'baked salmon',
   'egg',
   'yogurt',
+  'greek yogurt',
   'beans',
   'lentils',
-  'fish'
+  'fish',
+  'avocado',
+  'almonds'
 ]);
 
 export default function Home() {
@@ -125,7 +134,9 @@ export default function Home() {
 
         <div className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4">
           <h2 className="text-sm font-semibold">Try these examples:</h2>
-          <p className="mt-1 text-sm text-slate-600">chips, donut, soda, apple, fish, salad</p>
+          <p className="mt-1 text-sm text-slate-600">
+            Junk: chips, hamburger, soda, cake, hot dog. Not junk: apple, fish, salad, oatmeal, almonds.
+          </p>
         </div>
       </section>
     </main>
