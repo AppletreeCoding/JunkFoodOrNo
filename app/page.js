@@ -50,14 +50,18 @@ const healthyFoods = new Set([
 
 export default function Home() {
   const [foodInput, setFoodInput] = useState('');
-  const [checkedFood, setCheckedFood] = useState('');
+  const [descriptionInput, setDescriptionInput] = useState('');
+  const [howMadeInput, setHowMadeInput] = useState('');
+  const [submission, setSubmission] = useState(null);
 
   const result = useMemo(() => {
-    if (!checkedFood) {
+    if (!submission) {
       return null;
     }
 
-    const normalizedFood = checkedFood.trim().toLowerCase();
+    const normalizedFood = submission.food.trim().toLowerCase();
+    const normalizedDescription = submission.description.trim().toLowerCase();
+    const normalizedHowMade = submission.howMade.trim().toLowerCase();
 
     if (!normalizedFood) {
       return {
@@ -66,29 +70,45 @@ export default function Home() {
       };
     }
 
-    if (junkFoods.has(normalizedFood)) {
+    const allText = [normalizedFood, normalizedDescription, normalizedHowMade].join(' ');
+
+    const hasJunkSignal =
+      junkFoods.has(normalizedFood) ||
+      Array.from(junkFoods).some((food) => allText.includes(food)) ||
+      /(fried|deep[- ]fried|sugary|processed|fast food|high sugar)/.test(allText);
+
+    if (hasJunkSignal) {
       return {
-        label: `Yes, ${checkedFood} is usually considered junk food.`,
+        label: `Likely junk food: ${submission.food}. The name/description/how it's made matches common junk-food signals.`,
         tone: 'junk'
       };
     }
 
-    if (healthyFoods.has(normalizedFood)) {
+    const hasHealthySignal =
+      healthyFoods.has(normalizedFood) ||
+      Array.from(healthyFoods).some((food) => allText.includes(food)) ||
+      /(baked|grilled|steamed|fresh|whole grain|lean protein|vegetable)/.test(allText);
+
+    if (hasHealthySignal) {
       return {
-        label: `No, ${checkedFood} is generally not junk food.`,
+        label: `Likely not junk food: ${submission.food}. The details suggest a less-processed preparation.`,
         tone: 'healthy'
       };
     }
 
     return {
-      label: `"${checkedFood}" is not in our simple list yet. Try a common food like pizza, apple, chips, or salad.`,
+      label: `Not sure yet for "${submission.food}". Try adding clearer details in the description or preparation method.`,
       tone: 'neutral'
     };
-  }, [checkedFood]);
+  }, [submission]);
 
   function handleSubmit(event) {
     event.preventDefault();
-    setCheckedFood(foodInput);
+    setSubmission({
+      food: foodInput,
+      description: descriptionInput,
+      howMade: howMadeInput
+    });
   }
 
   const resultClasses = {
@@ -101,12 +121,9 @@ export default function Home() {
     <main className="mx-auto flex min-h-screen w-full max-w-2xl flex-col items-center justify-center gap-6 px-4 py-12">
       <section className="w-full rounded-2xl bg-white p-6 shadow-lg md:p-8">
         <h1 className="text-3xl font-bold tracking-tight">Junk or No</h1>
-        <p className="mt-2 text-sm text-slate-600">
-          Type a food and click <span className="font-semibold">Check Food</span>. This beginner-friendly app will tell
-          you if it is commonly considered junk food.
-        </p>
+        <p className="mt-2 text-sm text-slate-600">Add the food, a short description, and how it is made to check if it is likely junk food.</p>
 
-        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3 sm:flex-row">
+        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3">
           <label htmlFor="food" className="sr-only">
             Food item
           </label>
@@ -118,9 +135,31 @@ export default function Home() {
             placeholder="Example: pizza"
             className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none ring-offset-2 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
           />
+          <label htmlFor="description" className="sr-only">
+            Short description
+          </label>
+          <input
+            id="description"
+            type="text"
+            value={descriptionInput}
+            onChange={(event) => setDescriptionInput(event.target.value)}
+            placeholder="Short description (e.g., cheesy, salty snack)"
+            className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none ring-offset-2 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          />
+          <label htmlFor="howMade" className="sr-only">
+            How it is made
+          </label>
+          <textarea
+            id="howMade"
+            value={howMadeInput}
+            onChange={(event) => setHowMadeInput(event.target.value)}
+            placeholder="How it's made (e.g., deep-fried in oil, baked with vegetables)"
+            rows={3}
+            className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none ring-offset-2 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          />
           <button
             type="submit"
-            className="rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="self-start rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
           >
             Check Food
           </button>
